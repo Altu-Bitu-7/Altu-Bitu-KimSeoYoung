@@ -19,8 +19,7 @@ int main() {
         //최소힙과 최대힙의 개수차이가 1보다 많이나지 않게 조절
         if (max.size() == min.size()) {
             max.push(a);
-        }
-        else {
+        }else {
             min.push(a);
         }
         //최대힙의 top에 중간값이 옴
