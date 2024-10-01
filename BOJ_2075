@@ -1,0 +1,27 @@
+#include <iostream>
+#include <queue>
+using namespace std;
+
+void sol(int n) {
+    priority_queue<int, vector<int>, greater<int>> pq; //우선순위 큐 선언언
+    int temp;
+    for(int i = 0; i < n * n; i++) {
+        cin >> temp;
+        pq.push(temp);
+        if(pq.size() > n) pq.pop(); //pq의 사이즈가 n보다 크면 가장 작은 수 pop()
+    }
+    cout << pq.top(); //n번째 큰수가 남아있음
+}
+
+int main () {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    //입력
+    int n;
+    cin >> n;
+    //구현 및 출력
+    sol(n);
+
+    return 0;
+}

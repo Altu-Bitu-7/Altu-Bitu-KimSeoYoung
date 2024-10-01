@@ -1,0 +1,60 @@
+#include <iostream>
+#include <queue>
+#include <vector>
+#include <string>
+using namespace std;
+
+void count_characters(const string& word, vector<int>& freq) {
+    for (char ch : word) { //컨테이너의 요소를 처음부터 끝까지 자동으로 순회
+        freq[ch - 'A']++;
+    }
+}
+
+bool is_similar(const vector<int>& base_freq, const vector<int>& target_freq, int n) {
+    priority_queue<int, vector<int>, greater<int>> pq;
+    
+    int add = 0, remove = 0, diff = 0;  //문자 추가, 제거, 차이를 관리
+    for (int i = 0; i < 26; i++) {
+        int diff_count = base_freq[i] - target_freq[i];
+        if (diff_count > 0) remove += diff_count;  //기준 단어에 더 많은 문자
+        else if (diff_count < 0) add -= diff_count;  //기준 단어에 없는 문자가 추가된 경우
+        
+        diff += abs(diff_count);  //차이 총합
+        pq.push(abs(diff_count));  //우선순위 큐에 차이값 추가
+    }
+
+    //비슷한 단어는 문자 차이가 2 이하이면서 추가/제거 가능한 경우
+    if (diff <= 2 && (add <= 1 && remove <= 1)) return true;
+
+    return false;
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    //입력
+    int n;
+    string base_word;
+    cin >> n >> base_word;
+    //구현
+    vector<int> base_freq(26, 0);  //기준 단어의 문자 빈도
+    count_characters(base_word, base_freq);
+
+    int similar_count = 0;
+    for (int i = 1; i < n; i++) {
+        string word;
+        cin >> word;
+
+        vector<int> target_freq(26, 0);  //비교할 단어의 문자 빈도
+        count_characters(word, target_freq);
+
+        if (is_similar(base_freq, target_freq, n)) {
+            similar_count++;
+        }
+    }
+    //출력
+    cout << similar_count << "\n";
+
+    return 0;
+}
