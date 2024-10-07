@@ -1,6 +1,6 @@
 from collections import deque
 
-# BFS 함수 정의: start에서 target까지의 촌수를 계산
+# BFS 함수 정의: start에서 target까지의 촌수를 계산 
 def bfs(start, target):
     # 각 사람의 방문 여부를 저장할 리스트 (방문하지 않은 경우 0)
     visited = [-1] * (n + 1)
