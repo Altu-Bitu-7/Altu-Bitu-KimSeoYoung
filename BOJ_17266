@@ -1,0 +1,39 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+bool canLightUpTunnel(int height, const vector<int>& positions, int tunnelLength) {
+    int currentCoverage = 0;
+    for (int pos : positions) {
+        if (currentCoverage < pos - height) {
+            return false;
+        }
+        currentCoverage = pos + height;
+    }
+    return currentCoverage >= tunnelLength;
+}
+
+int main() {
+    int tunnelLength, numLights;
+    cin >> tunnelLength >> numLights;
+
+    vector<int> positions(numLights);
+    for (int i = 0; i < numLights; i++) {
+        cin >> positions[i];
+    }
+
+    int left = 1, right = tunnelLength, answer = tunnelLength;
+    while (left <= right) {
+        int mid = (left + right) / 2;
+        if (canLightUpTunnel(mid, positions, tunnelLength)) {
+            answer = mid;
+            right = mid - 1;
+        } else {
+            left = mid + 1;
+        }
+    }
+
+    cout << answer << endl;
+    return 0;
+}
