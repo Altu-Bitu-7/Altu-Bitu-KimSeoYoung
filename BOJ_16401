@@ -1,0 +1,40 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+bool canDivideSnacks(const vector<int>& snacks, int numChildren, int length) {
+    int count = 0;
+    for (int snack : snacks) {
+        count += snack / length;
+        if (count >= numChildren) return true; // 필요한 아이 수만큼 나눠줄 수 있으면 true
+    }
+    return count >= numChildren;
+}
+
+int main() {
+    int numChildren, numSnacks;
+    cin >> numChildren >> numSnacks;
+    
+    vector<int> snacks(numSnacks);
+    for (int i = 0; i < numSnacks; i++) {
+        cin >> snacks[i];
+    }
+    
+    // 과자의 길이를 내림차순으로 정렬하여 큰 길이부터 탐색하도록 합니다.
+    sort(snacks.begin(), snacks.end(), greater<int>());
+
+    int left = 1, right = snacks[0], answer = 0;
+    while (left <= right) {
+        int mid = (left + right) / 2;
+        if (canDivideSnacks(snacks, numChildren, mid)) {
+            answer = mid; // 가능한 길이이므로 저장
+            left = mid + 1; // 더 큰 길이를 탐색
+        } else {
+            right = mid - 1; // 길이가 부족하면 더 작은 길이를 탐색
+        }
+    }
+
+    cout << answer << endl;
+    return 0;
+}
