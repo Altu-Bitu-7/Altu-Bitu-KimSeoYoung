@@ -1,0 +1,45 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+bool canDivideLectures(const vector<int>& lessons, int numBluRays, int maxSize) {
+    int count = 1, currentSum = 0;
+    for (int lesson : lessons) {
+        if (currentSum + lesson > maxSize) {
+            count++; // 새로운 블루레이에 녹화
+            currentSum = lesson;
+            if (count > numBluRays) return false;
+        } else {
+            currentSum += lesson;
+        }
+    }
+    return true;
+}
+
+int main() {
+    int numLessons, numBluRays;
+    cin >> numLessons >> numBluRays;
+    
+    vector<int> lessons(numLessons);
+    int maxLesson = 0, totalSum = 0;
+    for (int i = 0; i < numLessons; i++) {
+        cin >> lessons[i];
+        maxLesson = max(maxLesson, lessons[i]);
+        totalSum += lessons[i];
+    }
+    
+    int left = maxLesson, right = totalSum, answer = totalSum;
+    while (left <= right) {
+        int mid = (left + right) / 2;
+        if (canDivideLectures(lessons, numBluRays, mid)) {
+            answer = mid; // 가능한 블루레이 크기이므로 저장
+            right = mid - 1; // 더 작은 크기를 탐색
+        } else {
+            left = mid + 1; // 더 큰 크기를 탐색
+        }
+    }
+
+    cout << answer << endl;
+    return 0;
+}

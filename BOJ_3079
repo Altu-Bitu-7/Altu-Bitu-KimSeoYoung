@@ -1,0 +1,42 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+bool canProcessAll(int64_t time, const vector<int>& times, int64_t numPeople) {
+    int64_t totalProcessed = 0;
+    for (int t : times) {
+        totalProcessed += time / t; // 각 심사대에서 주어진 시간 내에 처리할 수 있는 사람 수
+        if (totalProcessed >= numPeople) return true; // 필요한 사람 수를 모두 처리할 수 있으면 true
+    }
+    return totalProcessed >= numPeople;
+}
+
+int main() {
+    int numStations;
+    int64_t numPeople;
+    cin >> numStations >> numPeople;
+
+    vector<int> times(numStations);
+    int maxTime = 0;
+    for (int i = 0; i < numStations; i++) {
+        cin >> times[i];
+        maxTime = max(maxTime, times[i]);
+    }
+
+    int64_t left = 1, right = static_cast<int64_t>(maxTime) * numPeople;
+    int64_t answer = right;
+
+    while (left <= right) {
+        int64_t mid = (left + right) / 2;
+        if (canProcessAll(mid, times, numPeople)) {
+            answer = mid; // 가능한 시간이면 저장
+            right = mid - 1; // 더 작은 시간으로 탐색
+        } else {
+            left = mid + 1; // 더 큰 시간으로 탐색
+        }
+    }
+
+    cout << answer << endl;
+    return 0;
+}
